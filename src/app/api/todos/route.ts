@@ -1,17 +1,29 @@
 import { NextResponse } from "next/server";
-import { db } from "@/app/lib/mongo";
+import { getDB } from "@/app/lib/mongo";
 
 export async function GET() {
-  const todos = await db.collection("todos").find().toArray();
-  return NextResponse.json(todos);
+  try {
+    const db = await getDB();
+    const todos = await db.collection("todos").find().toArray();
+    return NextResponse.json(todos);
+  } catch (err) {
+    console.error("GET /api/todos error:", err);
+    return NextResponse.json({ error: "Ошибка сервера" }, { status: 500 });
+  }
 }
 
 export async function POST(req: Request) {
-  const { text } = await req.json();
-  if (!text || text.trim() === "") {
-    return NextResponse.json({ error: "Пустая задача" }, { status: 400 });
-  }
+  try {
+    const body = await req.json();
+    if (!body.text || !body.text.trim()) {
+      return NextResponse.json({ error: "Пустая задача" }, { status: 400 });
+    }
 
-  await db.collection("todos").insertOne({ text });
-  return NextResponse.json({ ok: true });
+    const db = await getDB();
+    await db.collection("todos").insertOne({ text: body.text });
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("POST /api/todos error:", err);
+    return NextResponse.json({ error: "Ошибка сервера" }, { status: 500 });
+  }
 }
