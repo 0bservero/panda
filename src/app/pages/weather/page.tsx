@@ -1,13 +1,24 @@
 "use client";
 import { useState } from "react";
 
+interface WeatherData {
+  name: string;
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+  };
+}
+
 export default function Weather() {
   const [city, setCity] = useState("Tashkent");
-  const [weather, setWeather] = useState<any>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
 
   const getWeather = async () => {
     const res = await fetch(`/api/weather?city=${city}`);
-    const data = await res.json();
+    const data: WeatherData = await res.json();
     setWeather(data);
   };
 
@@ -19,11 +30,14 @@ export default function Weather() {
         placeholder="Введите город"
         className="border p-2 rounded"
       />
-      <button onClick={getWeather} className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
+      <button
+        onClick={getWeather}
+        className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
+      >
         Показать погоду
       </button>
 
-      {weather && weather.main && (
+      {weather && (
         <div className="mt-4">
           <h2 className="text-xl font-bold">{weather.name}</h2>
           <p>🌡 {weather.main.temp}°C</p>
