@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 type ChartType = "line" | "bar" | "pie";
 
@@ -28,7 +28,7 @@ export default function Charts() {
     "#EC4899", "#06B6D4", "#84CC16", "#F97316", "#6366F1"
   ];
 
-  const drawChart = () => {
+  const drawChart = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -63,9 +63,9 @@ export default function Charts() {
     } else if (chartType === "pie") {
       drawPieChart(ctx, chartArea);
     }
-  };
+  }, [chartType, data, chartTitle]);
 
-  const drawBarChart = (ctx: CanvasRenderingContext2D, area: any) => {
+  const drawBarChart = (ctx: CanvasRenderingContext2D, area: { x: number; y: number; width: number; height: number }) => {
     const maxValue = Math.max(...data.map(d => d.value));
     const barWidth = area.width / data.length * 0.8;
     const barSpacing = area.width / data.length * 0.2;
@@ -90,7 +90,7 @@ export default function Charts() {
     });
   };
 
-  const drawLineChart = (ctx: CanvasRenderingContext2D, area: any) => {
+  const drawLineChart = (ctx: CanvasRenderingContext2D, area: { x: number; y: number; width: number; height: number }) => {
     const maxValue = Math.max(...data.map(d => d.value));
     const minValue = Math.min(...data.map(d => d.value));
     const valueRange = maxValue - minValue || 1;
@@ -127,7 +127,7 @@ export default function Charts() {
     ctx.stroke();
   };
 
-  const drawPieChart = (ctx: CanvasRenderingContext2D, area: any) => {
+  const drawPieChart = (ctx: CanvasRenderingContext2D, area: { x: number; y: number; width: number; height: number }) => {
     const total = data.reduce((sum, item) => sum + item.value, 0);
     const centerX = area.x + area.width / 2;
     const centerY = area.y + area.height / 2;
@@ -184,7 +184,7 @@ export default function Charts() {
 
   useEffect(() => {
     drawChart();
-  }, [chartType, data, chartTitle]);
+  }, [drawChart]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">

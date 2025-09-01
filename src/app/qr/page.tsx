@@ -4,6 +4,7 @@
 import React from "react";
 import { useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
+import Image from "next/image";
 
 export default function QRPage() {
   const [text, setText] = useState("https://example.com");
@@ -38,7 +39,7 @@ export default function QRPage() {
       
       // Если есть картинка в центре, добавляем её
       if (centerImage) {
-        const img = new Image();
+        const img = new window.Image();
         img.onload = () => {
           const centerX = size / 2;
           const centerY = size / 2;
@@ -162,15 +163,12 @@ export default function QRPage() {
           includeMargin={true}
         />
         {centerImage && (
-          <img
+          <Image
             src={centerImage}
             alt="Center"
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded"
-            style={{
-              width: `${imageSize}px`,
-              height: `${imageSize}px`,
-              objectFit: 'cover'
-            }}
+            width={imageSize}
+            height={imageSize}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded object-cover"
           />
         )}
       </div>

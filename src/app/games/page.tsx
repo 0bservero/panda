@@ -56,14 +56,19 @@ function TicTacToe() {
   const [isXNext, setIsXNext] = useState(true);
   const [winner, setWinner] = useState<string | null>(null);
 
-  const checkWinner = (squares: any[]) => {
+  const checkWinner = (squares: (string | null)[]) => {
     const lines = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
+      [0, 1, 2], 
+      [3, 4, 5], 
+      [6, 7, 8],
+      [0, 3, 6], 
+      [1, 4, 7], 
+      [2, 5, 8],
+      [0, 4, 8], 
+      [2, 4, 6]
     ];
     
-    for (let line of lines) {
+    for (const line of lines) {
       const [a, b, c] = line;
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
         return squares[a];
@@ -323,7 +328,7 @@ function Game2048() {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [board, gameOver]);
+  }, [board, gameOver, move]);
 
   const resetGame = () => {
     const newBoard = Array(4).fill(null).map(() => Array(4).fill(0));
