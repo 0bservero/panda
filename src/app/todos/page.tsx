@@ -41,31 +41,38 @@ const addTodo = async (e: React.FormEvent) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-8">
-      <h1 className="text-3xl font-bold mb-6">🔥 Мини TODO</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white flex flex-col items-center p-3 sm:p-6 md:p-8">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">🔥 Мини TODO</h1>
 
-      <form className="flex gap-2 mb-6" onSubmit={addTodo}>
+      <form className="flex flex-col sm:flex-row gap-2 mb-4 sm:mb-6 w-full max-w-md" onSubmit={addTodo}>
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Новая задача..."
-          className="px-4 py-2 rounded-lg text-black bg-white"
+          className="flex-1 px-3 sm:px-4 py-2 rounded-lg text-black bg-white text-sm sm:text-base touch-manipulation"
         />
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 px-4 py-2 rounded-lg font-semibold shadow-lg transition-all touch-manipulation text-sm sm:text-base"
         >
-          Добавить
+          ➕ Добавить
         </button>
       </form>
 
       <ul className="w-full max-w-md space-y-2">
         {todos.map((t) => (
-          <li key={t._id} className="bg-gray-800 px-4 py-2 rounded-lg shadow">
+          <li key={t._id} className="bg-gray-800 hover:bg-gray-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-lg transition-colors text-sm sm:text-base">
             {t.text}
           </li>
         ))}
       </ul>
+      
+      {todos.length === 0 && (
+        <div className="mt-8 text-center text-gray-400">
+          <p className="text-lg sm:text-xl mb-2">📝</p>
+          <p className="text-sm sm:text-base">Пока нет задач. Добавьте первую!</p>
+        </div>
+      )}
     </div>
   );
 }

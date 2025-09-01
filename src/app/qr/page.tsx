@@ -77,108 +77,116 @@ export default function QRPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-6 p-6 bg-gray-900 text-white">
-      <h1 className="text-3xl font-bold">📲 QR Генератор</h1>
-
-      <div className="flex flex-col gap-4 w-full max-w-md">
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Введите текст или ссылку"
-          className="border p-2 rounded w-full text-black bg-white"
-        />
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm mb-1">Цвет фона:</label>
-            <input
-              type="color"
-              value={bgColor}
-              onChange={(e) => setBgColor(e.target.value)}
-              className="w-full h-10 rounded border"
-            />
-          </div>
-          <div>
-            <label className="block text-sm mb-1">Цвет QR:</label>
-            <input
-              type="color"
-              value={fgColor}
-              onChange={(e) => setFgColor(e.target.value)}
-              className="w-full h-10 rounded border"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Размер: {size}px</label>
-          <input
-            type="range"
-            min="100"
-            max="400"
-            value={size}
-            onChange={(e) => setSize(Number(e.target.value))}
-            className="w-full"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Картинка в центре:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="w-full text-white"
-          />
-          {centerImage && (
-            <div className="mt-2">
-              <label className="block text-sm mb-1">Размер картинки: {imageSize}px</label>
-              <input
-                type="range"
-                min="20"
-                max="80"
-                value={imageSize}
-                onChange={(e) => setImageSize(Number(e.target.value))}
-                className="w-full"
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-3 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">📱 QR Code Generator</h1>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          {/* Левая панель - настройки */}
+          <div className="space-y-4 sm:space-y-6">
+            <div>
+              <label className="block text-sm font-medium mb-2">Текст для QR кода:</label>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white resize-none text-sm sm:text-base"
+                rows={3}
+                placeholder="Введите текст или URL..."
               />
             </div>
-          )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Цвет фона:</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="color"
+                    value={bgColor}
+                    onChange={(e) => setBgColor(e.target.value)}
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded border border-gray-600 cursor-pointer touch-manipulation"
+                  />
+                  <span className="text-xs sm:text-sm text-gray-300">{bgColor}</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Цвет QR кода:</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="color"
+                    value={fgColor}
+                    onChange={(e) => setFgColor(e.target.value)}
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded border border-gray-600 cursor-pointer touch-manipulation"
+                  />
+                  <span className="text-xs sm:text-sm text-gray-300">{fgColor}</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Размер: {size}px</label>
+              <input
+                type="range"
+                min="128"
+                max="512"
+                value={size}
+                onChange={(e) => setSize(parseInt(e.target.value))}
+                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider touch-manipulation"
+              />
+              <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <span>128px</span>
+                <span>512px</span>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Изображение в центре (опционально):</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="w-full p-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm file:mr-2 sm:file:mr-4 file:py-2 file:px-2 sm:file:px-4 file:rounded file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:text-xs sm:file:text-sm touch-manipulation"
+              />
+              {centerImage && (
+                <div className="mt-2">
+                  <p className="text-sm text-green-400 mb-2">✓ Изображение загружено</p>
+                  <button
+                    onClick={() => setCenterImage(null)}
+                    className="text-sm text-red-400 hover:text-red-300 touch-manipulation"
+                  >
+                    Удалить изображение
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Правая панель - превью и скачивание */}
+          <div className="flex flex-col items-center space-y-4 sm:space-y-6">
+            <div className="bg-white p-3 sm:p-6 rounded-lg shadow-lg max-w-full overflow-hidden">
+              <div className="flex justify-center">
+                <QRCodeCanvas
+                  id="qr-gen"
+                  value={text}
+                  size={Math.min(size, 300)}
+                  bgColor={bgColor}
+                  fgColor={fgColor}
+                  level="H"
+                  includeMargin={true}
+                />
+              </div>
+            </div>
+            
+            <button
+              onClick={downloadQR}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 sm:px-6 rounded-lg transition-colors duration-200 flex items-center space-x-2 text-sm sm:text-base touch-manipulation w-full sm:w-auto justify-center"
+            >
+              <span>📥</span>
+              <span>Скачать QR код</span>
+            </button>
+          </div>
         </div>
       </div>
-
-      <div className="relative">
-        <canvas
-          id="qr-container"
-          width={size}
-          height={size}
-          className="hidden"
-        />
-        <QRCodeCanvas
-          id="qr-gen"
-          value={text}
-          size={size}
-          bgColor={bgColor}
-          fgColor={fgColor}
-          level="H"
-          includeMargin={true}
-        />
-        {centerImage && (
-          <Image
-            src={centerImage}
-            alt="Center"
-            width={imageSize}
-            height={imageSize}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded object-cover"
-          />
-        )}
-      </div>
-
-      <button
-        onClick={downloadQR}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Скачать QR
-      </button>
     </div>
   );
 }
