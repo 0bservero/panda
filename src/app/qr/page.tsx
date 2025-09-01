@@ -1,6 +1,7 @@
 // src/app/qr/page.tsx
 "use client";
 
+import React from "react";
 import { useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 
@@ -27,7 +28,7 @@ export default function QRPage() {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Введите текст или ссылку"
-        className="border p-2 rounded w-80 text-black"
+        className="border p-2 rounded w-80 text-black bg-white"
       />
 
       <QRCodeCanvas

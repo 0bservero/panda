@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Разные полезные инструменты",
-  description: "У нас есть: TODO, погода",
+  description: "У нас есть: TODO, погода, QR",
 };
 
 export default function RootLayout({
