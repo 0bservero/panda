@@ -660,26 +660,46 @@ function Game2048() {
     let scoreGain = 0;
 
     for (let i = 0; i < 4; i++) {
-      const row = newGrid[i].filter(cell => cell !== 0);
-      for (let j = 0; j < row.length - 1; j++) {
-        if (row[j] === row[j + 1]) {
-          row[j] *= 2;
-          scoreGain += row[j];
-          if (row[j] === 2048 && !won) {
-            setWon(true);
+      // Убираем нули и сдвигаем влево
+      let row = newGrid[i].filter(cell => cell !== 0);
+      
+      // Продолжаем объединять до тех пор, пока возможно
+      let hasChanged = true;
+      while (hasChanged && row.length > 1) {
+        hasChanged = false;
+        const newRow = [];
+        let j = 0;
+        
+        while (j < row.length) {
+          if (j < row.length - 1 && row[j] === row[j + 1]) {
+            // Объединяем две одинаковые плитки
+            const mergedValue = row[j] * 2;
+            newRow.push(mergedValue);
+            scoreGain += mergedValue;
+            if (mergedValue === 2048 && !won) {
+              setWon(true);
+            }
+            j += 2; // Пропускаем следующую плитку
+            hasChanged = true;
+          } else {
+            newRow.push(row[j]);
+            j += 1;
           }
-          row.splice(j + 1, 1);
         }
+        row = newRow;
       }
+      
+      // Заполняем оставшиеся позиции нулями
       while (row.length < 4) {
         row.push(0);
       }
       
-      for (let j = 0; j < 4; j++) {
-        if (newGrid[i][j] !== row[j]) {
+      // Проверяем, изменилась ли строка
+      for (let k = 0; k < 4; k++) {
+        if (newGrid[i][k] !== row[k]) {
           moved = true;
         }
-        newGrid[i][j] = row[j];
+        newGrid[i][k] = row[k];
       }
     }
 
@@ -699,7 +719,7 @@ function Game2048() {
   const move = (direction: 'left' | 'right' | 'up' | 'down') => {
     if (gameOver) return;
 
-    let currentGrid = [...board];
+    let currentGrid = board.map(row => [...row]);
     let rotations = 0;
 
     switch (direction) {
@@ -719,14 +739,15 @@ function Game2048() {
     }
 
     const { grid: movedGrid, moved, scoreGain } = moveLeft(currentGrid);
+    let finalGrid = movedGrid;
 
     for (let i = 0; i < (4 - rotations) % 4; i++) {
-      currentGrid = rotateGrid(movedGrid);
+      finalGrid = rotateGrid(finalGrid);
     }
 
     if (moved) {
-      addRandomTile(currentGrid);
-      setBoard(currentGrid);
+      addRandomTile(finalGrid);
+      setBoard(finalGrid);
       setScore(prev => {
         const newScore = prev + scoreGain;
         if (newScore > bestScore) {
@@ -744,7 +765,7 @@ function Game2048() {
 
       // Check game over
       setTimeout(() => {
-        if (!canMove(currentGrid)) {
+        if (!canMove(finalGrid)) {
           setGameOver(true);
         }
       }, 200);
@@ -950,7 +971,6 @@ function Game2048() {
   );
 }
 
-// Игра на память с улучшенным дизайном
 function Memory() {
   const cardSymbols = ['🎯', '🎮', '🎲', '🎪', '🎨', '🎭', '🎸', '🎺'];
   const [cards, setCards] = useState<{id: number, symbol: string, isFlipped: boolean, isMatched: boolean}[]>([]);

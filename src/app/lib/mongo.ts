@@ -18,7 +18,6 @@ let db: Db;
 export async function getDB() {
   if (!global._mongoClientPromise) {
     client = new MongoClient(uri!, {
-      // если Render чудит с SSL — иногда помогает
       tls: true,
       retryWrites: true,
     });
