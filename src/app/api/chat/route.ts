@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const prompt = `${PROMPTS[role]}\nВопрос: ${message}`
 
     const res = await fetch(
-      'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct',
+      'https://router.huggingface.co/hf-inference/models/mistralai/Mistral-7B-Instruct',
       {
         method: 'POST',
         headers: {
@@ -27,7 +27,10 @@ export async function POST(req: Request) {
         },
         body: JSON.stringify({
           inputs: prompt,
-          parameters: { max_new_tokens: 300 }
+          parameters: {
+            max_new_tokens: 300,
+            temperature: 0.7
+          }
         })
       }
     )
@@ -39,7 +42,6 @@ export async function POST(req: Request) {
     }
 
     let text = data?.[0]?.generated_text ?? 'Нет ответа'
-
     text = text.replace(prompt, '').trim()
 
     return NextResponse.json({ answer: text })
