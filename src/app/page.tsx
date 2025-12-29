@@ -11,9 +11,14 @@ export default function Home() {
       <div className="container mx-auto px-4 py-6 sm:py-10">
         <header className="mb-8 sm:mb-12 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg shadow-blue-500/20">
-              <span className="text-xl">💬</span>
-            </div>
+        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+        font-family="Arial Black" font-size="90"
+        fill="#000000" stroke="#6A0DAD" stroke-width="2">
+        SB
+        </text>
+</svg>
+
             <div>
               <div className="text-lg sm:text-xl font-semibold tracking-wide">Mini Chat Tools</div>
               <div className="text-xs sm:text-sm text-gray-400">Коллекция инструментов и мини‑игр</div>
