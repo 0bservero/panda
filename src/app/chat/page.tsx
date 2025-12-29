@@ -20,16 +20,16 @@ export default function Chat() {
       body: JSON.stringify({ message, role })
     })
 
-    const data = await res.json()
-    setAnswer(data.answer)
+    const data: { answer?: string } = await res.json()
+    setAnswer(data.answer || 'Извини, не могу ответить на этот вопрос. Попробуй позже или переформулируй его подробнее.')
     setLoading(false)
   }
 
-  return (
+  return ( 
     <div style={{ maxWidth: 600, margin: '40px auto' }}>
       <h2>AI помощник</h2>
 
-      <select value={role} onChange={e => setRole(e.target.value as any)}>
+      <select value={role} onChange={e => setRole(e.target.value as 'student' | 'teacher')}>
         <option value="student">👨‍🎓 Ученик</option>
         <option value="teacher">👨‍🏫 Я</option>
       </select>
