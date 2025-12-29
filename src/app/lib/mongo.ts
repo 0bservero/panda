@@ -2,7 +2,6 @@
 import { MongoClient, Db } from "mongodb";
 
 declare global {
-  // чтобы не пересоздавалось при hot-reload
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
